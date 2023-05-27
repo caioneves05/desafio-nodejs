@@ -3,7 +3,7 @@
 Esta documentação descreve os endpoints e as funcionalidades da API que você criou. A API possui recursos para registro de usuários, login de usuários e busca de usuários.
 
 ## Base URL
-A base URL da API é: `https://localhost:PORTA`
+A base URL da API é: `https://desafio-nodejs.herokuapp.com`
 
 ## Registro de Usuário (Sign up)
 Este endpoint permite o registro de um novo usuário.
