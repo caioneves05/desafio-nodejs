@@ -1,8 +1,24 @@
 import User from '../models/User.model.js'
 import cryptojs from 'crypto-js'
 import { v4 } from 'uuid'
+import  jwt  from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 
 class UserController {
+
+    static createToken (email, id) {
+        const payload = {
+            email: email,
+            id: id
+        }
+        const token = jwt.sign(payload, process.env.SECRET_KEY_JWT)
+
+        return token
+    } 
+
     static async createUser (req,res) {
         try{
             const user = new User(req.body)
@@ -27,7 +43,7 @@ class UserController {
     static async loginUser (req,res) {
         try{
             const user = new User(req.body)
-
+            
             if(user.email && user.password) {
                 const findPassword = await cryptojs.SHA256(user.password).toString()
                 
@@ -37,10 +53,9 @@ class UserController {
                 })
 
                 if(findUser) {
-                    res.status(200).json({
-                        id: findUser.id,
-                        email: findUser.email
-                    })
+                    const jwtPayload = UserController.createToken(findUser.email, findUser.id)
+                    
+                    res.status(200).json({token: jwtPayload})
                 }
                 else {
                     res.status(401).json({ error: 'Email or password are incorrect' })
