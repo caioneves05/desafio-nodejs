@@ -9,14 +9,25 @@ dotenv.config()
 
 class UserController {
 
-    static createToken (email, id) {
-        const payload = {
-            email: email,
-            id: id
-        }
-        const token = jwt.sign(payload, process.env.SECRET_KEY_JWT)
+    static validateSecretKey() {
+        const secretKey = process.env.SECRET_KEY_JWT
 
-        return token
+        if(secretKey && typeof secretKey === 'string') {
+            return secretKey
+        }
+        else{
+            throw new Error('secretKey enviroment is not defined')
+        }
+    }
+
+    static createToken (email, id) {
+            const payload = {
+                email: email,
+                id: id
+            }
+            const token = jwt.sign(payload, this.validateSecretKey())
+    
+            return token
     } 
 
     static async createUser (req,res) {
@@ -65,9 +76,39 @@ class UserController {
                 res.status(400).json({message: 'Email or password are required'})
             }
 
-        }catch(err){
+        }
+        catch(err){
             res.status(400).json({ error: err.message })
         }
+    }
+
+    static validateJWT (req,res) {
+        const headerAut = req.headers.authorization
+
+        if(!headerAut){
+            res.status(401).json({error: 'Token is not provided'})
+        }
+        const token = headerAut.split(' ')[1]
+
+        try{
+            const encrypt = jwt.verify(token, UserController.validateSecretKey(), (err) => {
+                if(err) {
+                    res.status(401).json({message: 'Unauthorized'})
+                }
+                else{
+                    res.status(200).json({message: 'authorized'})
+                }
+            })
+
+            return encrypt
+
+        } 
+        catch(err) {
+            res.status(400).json({ error: err.message })
+        }
+
+
+
     }
 }
 
