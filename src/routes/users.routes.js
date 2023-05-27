@@ -6,7 +6,7 @@ const router = express.Router()
 router
     .post('/user', UserController.createUser)
     .get('/user', UserController.loginUser)
-    .get('/user/search', UserController.validateJWT)
+    .get('/user/search', UserController.searchUser)
 
 
 export default router

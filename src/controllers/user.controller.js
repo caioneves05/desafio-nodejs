@@ -82,7 +82,7 @@ class UserController {
         }
     }
 
-    static validateJWT (req,res) {
+    static searchUser (req,res) {
         const headerAut = req.headers.authorization
 
         if(!headerAut){
@@ -91,13 +91,18 @@ class UserController {
         const token = headerAut.split(' ')[1]
 
         try{
-            const encrypt = jwt.verify(token, UserController.validateSecretKey(), (err) => {
+            const encrypt = jwt.verify(token, UserController.validateSecretKey(), (err, decode) => {
                 if(err) {
-                    res.status(401).json({message: 'Unauthorized'})
+                    res.status(401).json({message: 'Invalid Token'})
                 }
-                else{
-                    res.status(200).json({message: 'authorized'})
-                }
+                const userId = decode.id
+                const userEmail = decode.email
+            
+                res.status(200).json({
+                    message: 'authorized',
+                    email: userEmail,
+                    id: userId
+                })
             })
 
             return encrypt
