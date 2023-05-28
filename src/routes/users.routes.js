@@ -5,7 +5,7 @@ const router = express.Router()
 
 router
     .post('/user', UserController.createUser)
-    .get('/user', UserController.loginUser)
+    .post('/user', UserController.loginUser)
     .get('/user/search', UserController.searchUser)
 
 
