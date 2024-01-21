@@ -1,6 +1,6 @@
 # Documentação da API
 
-Esta documentação descreve os endpoints e as funcionalidades da API que você criou. A API possui recursos para registro de usuários, login de usuários e busca de usuários.
+Esta documentação descreve os endpoints e as funcionalidades da API, com o objetivo de demonstrar as habilidades e a conclusão do desafio.
 
 ## Base URL
 A base URL da API é: `https://desafio-nodejs.herokuapp.com`
